@@ -21,14 +21,13 @@ function main(input) {
     var no_of_trees = nc_arr[0];
     var jumping_capacity = nc_arr[1];
     var tree_node_arr = [];
-    class Tree {
-        constructor(x, y, no_of_monkeys, max_no_of_monkeys_that_can_jump) {
-            this.x = x;
+   
+	function Tree(x, y, no_of_monkeys, max_no_of_monkeys_that_can_jump){
+			this.x = x;
             this.y = y;
             this.no_of_monkeys = no_of_monkeys;
             this.max_no_of_monkeys_that_can_jump = max_no_of_monkeys_that_can_jump;
-        }
-    }
+	}
     for (var i = 1; i < ip_arr.length; i++) {
         xymt_arr = ip_arr[i].split(' ').map(Number);
         tree_node_arr.push(new Tree(xymt_arr[0], xymt_arr[1], xymt_arr[2], xymt_arr[3]));
