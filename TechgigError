@@ -1,22 +1,4 @@
-// the code i wrote
 
-process.stdin.resume();
-process.stdin.setEncoding('ascii');
-
-var input_stdin = "";
-var input_stdin_array = "";
-var input_currentline = 0;
-
-process.stdin.on('data', function (data) {
-    input_stdin += data;
-});
-
-
-process.stdin.on('end', function () {
- console.log(input_stdin);
- process.stdout.write(input_stdin);
- //main(input_stdin);
-});
 
 //Error 
 
