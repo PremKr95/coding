@@ -14,112 +14,87 @@ process.stdin.on('end', function () {
  main(input_stdin);
 });
 
+
 function main(input) {
     var ip_arr = input.split("\n");
-    var len = Number(ip_arr[0]);
-    var len_arr = ip_arr[1].split(" ").map(Number);
-    var time_arr = ip_arr[2].split(" ").map(Number);
-    findNoOfSalmon(len_arr, time_arr, len);
-}
-
-
-/* 
-    find overlapping salmon
-*/
-function findNoOfSalmon(len_arr, time_arr, len) {
-    // if length diff >= distance diff then can be catched together
-    var possibility_matrix = [];
-    var count_arr = [];
-    for (var i = 0; i < len; i++) {
-        if (!possibility_matrix[i]) {
-            possibility_matrix[i] = [];
-        }
-        if (!count_arr[i]) {
-            count_arr[i] = 0;
-        }
-        var isTwoSalmonCrossTogether;
-        for (var j = i; j < len; j++) {
-            isTwoSalmonCrossTogether = check(len_arr[i], time_arr[i], len_arr[j], time_arr[j]);
-            possibility_matrix[i][j] = isTwoSalmonCrossTogether;
-            if (isTwoSalmonCrossTogether) {
-                count_arr[i]++;
-            }
-            if (!possibility_matrix[j]) {
-                possibility_matrix[j] = [];
-            }
-            if (!count_arr[j]) {
-                count_arr[j] = 0;
-            }
-            possibility_matrix[j][i] = isTwoSalmonCrossTogether;
-            if (isTwoSalmonCrossTogether && i !== j)
-                count_arr[j]++;
+    var nc_arr = ip_arr[0].split(" ").map(Number);
+    var no_of_trees = nc_arr[0];
+    var jumping_capacity = nc_arr[1];
+    var tree_node_arr = [];
+    class Tree {
+        constructor(x, y, no_of_monkeys, max_no_of_monkeys_that_can_jump) {
+            this.x = x;
+            this.y = y;
+            this.no_of_monkeys = no_of_monkeys;
+            this.max_no_of_monkeys_that_can_jump = max_no_of_monkeys_that_can_jump;
         }
     }
-    // console.log(possibility_matrix, count_arr);
-    getCount(possibility_matrix, count_arr, len);
+    for (var i = 1; i < ip_arr.length; i++) {
+        xymt_arr = ip_arr[i].split(' ').map(Number);
+        tree_node_arr.push(new Tree(xymt_arr[0], xymt_arr[1], xymt_arr[2], xymt_arr[3]));
+    }
+
+    findTrees(tree_node_arr, jumping_capacity);
+
 }
 
-/* 
-    count the number of salmon caught in turn_1 and turn_2
-    TODO: print result
-*/
-function getCount(possibility_matrix, count_arr, len) {
-    var turn_1_index = 0;
-    var turn_1_count = count_arr[0];
-    var turn_2_count = 0;
-    for (var i = 0; i < count_arr.length; i++) {
-        if (count_arr[i] > turn_1_count) {
-            turn_1_count = count_arr[i];
-            turn_1_index = i;
-        }
-    }
-    if (count_arr.length > 1) {
-        var catched_salmon_arr = [];
-        for (var i = 0; i < possibility_matrix[turn_1_index].length; i++) {
-            if (possibility_matrix[turn_1_index][i]) {
-                catched_salmon_arr[i] = true;
+function findTrees(tree_node_arr, jumping_capacity) {
+    var index_arr = []; // where no_of_monkeys > max_no_of_monkeys_that_can_jump
+    for (var i = 0; i < tree_node_arr.length; i++) {
+        if (tree_node_arr[i].no_of_monkeys > tree_node_arr[i].max_no_of_monkeys_that_can_jump) {
+            index_arr.push(i); // if more than one tree has this situation then meeting no possible
+            if (index_arr.length > 1) {
+                console.log(-1);
+                return;
             }
         }
-        // console.log(catched_salmon_arr, turn_1_index, turn_1_count);
-        var turn_2_index;
-        for (var i = 0; i < catched_salmon_arr.length; i++) {
-            if (catched_salmon_arr[i]) {
-                continue;
-            } else {
-                turn_2_index = i;
-                turn_2_count = count_arr[i];
+    }
+    if (index_arr.length === 1) {
+        // all monkeys has to gather at index_arr[0] tree
+        // check for euclidean distance
+        var index = index_arr[0]; // tree where all monkeys will gather
+        for (var i = 0; i < tree_node_arr.length; i++) {
+            if (i !== index && euclideanDistance(tree_node_arr[index], tree_node_arr[i]) > jumping_capacity) {
+                console.log(-1);
+                return;
+            }
+        }
+        console.log(index);
+    }
+    var distance_matrix = [];
+    for (var i = 0; i < tree_node_arr.length; i++) {
+        if (!distance_matrix[i]) {
+            distance_matrix[i] = [];
+        }
+        for (var j = i; j < tree_node_arr.length; j++) {
+            var distance = euclideanDistance(tree_node_arr[i], tree_node_arr[j]);
+            distance_matrix[i][j] = distance;
+            if (!distance_matrix[j]) { // if distance_matrix[j] is undefined not yet initialized
+                distance_matrix[j] = [];
+            }
+            distance_matrix[j][i] = distance;
+        }
+    }
+    var tree_on_which_gathering_possible = [];
+    var possible;
+    for (var i = 0; i < tree_node_arr.length; i++) {
+        possible = true;
+        for (var j = 0; j < tree_node_arr.length; j++) {
+            if (distance_matrix[i][j] > jumping_capacity) {
+                possible = false;
                 break;
             }
         }
-
-        for (var i = 0; i < count_arr.length; i++) {
-            if (!catched_salmon_arr[i] && count_arr[i] > turn_2_count && (count_arr[i] + turn_1_count) <= len && checkNoneOfCurrentGroupCatched(possibility_matrix[i])) {
-                turn_2_index = i;
-                turn_2_count = count_arr[i];
-            }
-        }
-        // console.log(catched_salmon_arr, turn_2_index, turn_2_count);
-    } else {
-        turn_2_count = 0; // turn 2 not possible
-    }
-    console.log(turn_1_count + turn_2_count);
-}
-
-function checkNoneOfCurrentGroupCatched(arr) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i]) { // catched
-            return false;
+        if (possible) {
+            tree_on_which_gathering_possible.push(i);
         }
     }
-    return true;
+    console.log(tree_on_which_gathering_possible.join(' '));
 }
+
 /* 
-    TODO: function to check the two salmons are overlapping
+    Get the quclidean distance between two points in 2d plane
 */
-function check(len_i, time_i, len_j, time_j) {
-    if (Math.abs(len_i - len_j) >= Math.abs(time_i - time_j)) {
-        return true;
-    }
-    return false;
+function euclideanDistance(point1, point2) {
+    return Math.sqrt(Math.pow((point1.x - point2.x), 2) + Math.pow((point1.y - point2.y), 2));
 }
-
