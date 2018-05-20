@@ -1,12 +1,14 @@
-Error Message
-CandidateCode.js:24
-    class Tree {
-    ^^^^^
-SyntaxError: Unexpected reserved word
-    at Module._compile (module.js:439:25)
-    at Object.Module._extensions..js (module.js:474:10)
-    at Module.load (module.js:356:32)
-    at Function.Module._load (module.js:312:12)
-    at Function.Module.runMain (module.js:497:10)
-    at startup (node.js:119:16)
-    at node.js:902:3
+Console
+Result
+Test Case Testcase Failed Time (Sec) 0.33 Memory (KiB) 140
+Test Case Input
+3 100.0
+1 10 5 20
+5 10 5 20
+8 10 5 20
+Test Case Output
+0 1 2 3
+Expected Output
+0 1 2
+Compilation Log
+--Code Compiled successfully--
