@@ -1,22 +1,12 @@
-process.stdin.resume();
-process.stdin.setEncoding('ascii');
-
-var input_stdin = "";
-var input_stdin_array = "";
-var input_currentline = 0;
-
-process.stdin.on('data', function (data) {
-    input_stdin += data;
-});
-
-
-process.stdin.on('end', function () {
-    input_stdin_array = input_stdin.split("
-");
-	
-	//Write code here
-    
-    process.stdout.write(""+output+"
-");
-});
-
+Error Message
+CandidateCode.js:24
+    class Tree {
+    ^^^^^
+SyntaxError: Unexpected reserved word
+    at Module._compile (module.js:439:25)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Function.Module.runMain (module.js:497:10)
+    at startup (node.js:119:16)
+    at node.js:902:3
