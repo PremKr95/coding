@@ -1,1 +1,39 @@
 
+import math
+
+s=input().split(" ")
+n=int(s[0])
+capacity=float(s[1])
+
+finalArray=[]
+
+for i in range(0,n):
+	s=input().split(" ")
+	if(int(s[2])<=int(s[3])):
+		arr=[]
+		arr.append(float(s[0]))
+		arr.append(float(s[1]))
+		arr.append(int(s[2]))
+		arr.append(int(s[3]))
+		finalArray.append(arr)
+if len(finalArray)>1:
+	
+	flag=0
+	strr=""
+	for i in range(0,len(finalArray)):
+		count=0
+		for j in range(0,len(finalArray)):
+			if i==j:
+				continue
+			distance=math.sqrt(((finalArray[i][0]-finalArray[j][0])*(finalArray[i][0]-finalArray[j][0]))+((finalArray[i][1]-finalArray[j][1])*(finalArray[i][1]-finalArray[j][1])))
+			if(float(distance)<=capacity):
+				count+=1
+				flag=1
+		if count==len(finalArray)-1:
+			strr=strr+str(i)+" "
+	if flag==0:
+		print("-1")
+	else:
+		print(strr[:-1])
+else:
+	print("-1")
