@@ -2,13 +2,6 @@
 import java.io.*;
 import java.util.*;
 public class CandidateCode {
-   
-	private static void merge(int arr[], int l, int m, int r) {
-
-	    int i, j, k;
-	    int n1 = m - l +import java.util.Scanner;
-
-public class BobTheBear {
 
 	private static void merge(int arr[], int l, int m, int r) {
 
