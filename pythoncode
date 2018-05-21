@@ -1,8 +1,308 @@
-''' Read input from STDIN. Print your output to STDOUT '''
-    #Use input() to read input from STDIN and use print to write your output to STDOUT
-    
-def main():
- 
- # Write code here 
- 
-main()
+
+/* 
+ * Enter your code here. Read input from STDIN. Print your output to STDOUT. 
+ * Your class should be named CandidateCode.
+*/
+
+import java.io.*;
+import java.util.*;
+public class CandidateCode {
+    private static float distance(float x1, float y1) {
+		float dist, l;
+		l = x1 * x1 + y1 * y1;
+		dist = (float)Math.sqrt(l);
+		return dist;
+	}
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();
+		float C = sc.nextFloat();
+		
+		if(C == 0.0 && N != 1) {
+			System.out.print(-1);
+			System.exit(0);
+		}
+		
+		float x[] = new float[N];
+		float y[] = new float[N];
+		int m[] = new int[N];
+		int t[] = new int[N];
+		int i, count=0;
+		int a[] = new int[N];
+		int a1[] = new int[N];
+		int j = 0, first, second, w;
+		int t1[] = new int[N];
+		int t2[] = new int[N];
+		int l = 0, k = 1, h = 0, z = 0, q, third, f, p, u, c = 0, pass = 0, fail = 0;
+		float d;
+		
+		for(i = 0; i < N; i++) {
+			a[i] = -1;
+			a1[i] = -1;
+			t2[i] = 0;
+		}
+		
+		for(i = 0; i < N; i++) {
+			x[i] = sc.nextFloat();
+			y[i] = sc.nextFloat();
+			m[i] = sc.nextInt();
+			t[i] = sc.nextInt();
+		}
+		
+		for( i = 0; i < N; i++) {
+			t1[i] = t[i];
+			t2[i] = 0;
+		}
+		
+		count = 0;
+		for(i = 0; i < N; i++) {
+			if(m[i] > t[i]) {
+				count++;
+				j = i;
+			}
+		}
+		
+		if(count >= 2) {
+			System.out.print(-1);
+			System.exit(0);
+		}
+		
+		if(count == 1) {
+			h = 0;
+			p = 0;
+			first = j;
+			a1[first] = 0;
+			l = 0;
+			k = 1;
+			t2[l] = 0;
+			
+			for(j = 0; j< N; j++) {
+				t1[j] = t[j];
+				if(j != first) {
+					second = j;
+					d = distance(x[second] - x[first], y[second] - y[first]);
+					
+					if(d <= C) {
+						t1[second] = t1[second] - m[second];
+						t2[l] += t1[second];
+						a1[j] = k;
+						h++;
+					}
+					
+					if( d > C) {
+						a1[j] = -1;
+						p++;
+					}
+				}
+			}
+			
+			if(p == 0)
+				a[first] = 0;
+			
+			if(h == (N - 1)) 
+				a[first] = 1;
+			
+			if(h != (N - 1)) {
+				for( c = 0; c < N; c++) {
+					z = k;
+					f = l;
+					w = 0;
+					p = 0;
+					fail = 0;
+					pass = 0;
+					
+					for( i = 0; i < N; i++) {
+						if(a1[i] == -1) {
+							second = i;
+							q = 0;
+							while(q < N) {
+								if(a1[q] == z) {
+									third = q;
+									u = 0;
+									d = distance(x[third] - x[second], y[third] - y[second]);
+									if(d <= C) {
+										for(j = f; j >= 0; j--) {
+											if(t2[j] >= m[third]) {
+												u++;
+											}
+										}
+									}
+									
+									if(u != 0 && w == 0) {
+										k++;
+										l++;
+										w++;
+									}
+									
+									if(u != 0) {
+										h++;
+										p++;
+										pass++;
+										t1[third] = t1[third] - m[third];
+										t2[l] += t1[third] - m[third];
+										a1[second] = k;
+										q = N;
+									}
+								}
+								q++;
+							}
+						}
+					}
+				}
+			}
+			
+			if(h == N-1) {
+				System.out.print(first + " ");
+				System.exit(0);
+			}
+			
+			if(h != N - 1) {
+				System.out.print(-1);
+				System.exit(0);
+			}
+		}
+		
+		if(count == 0 && (N == 3 || N == 4 || N == 5)) {
+			for(i = 0; i < N; i++) {
+				z = 0;
+				first = i;
+				for( j = 0; j < N; j++) {
+					if(first != j) {
+						d = distance(x[first] - x[j], y[first] - y[j]);
+						if(d <= C)
+							z++;
+					}
+				}
+				
+				if(z == (N - 1)) 
+					a[first] = 1;
+				else
+					a[first] = 0;
+			}
+			
+			for(i = 0; i < N; i++) {
+				if(a[i] == 0) 
+					z++;
+			}
+			
+			if(z == N) {
+				System.out.print(-1);
+				System.exit(0);
+			}
+			
+			for(i = 0; i < N; i++) {
+				if(a[i] == 1)
+					System.out.print(i + " ");
+			}
+			System.exit(0);
+		}
+		
+		if(count==0) {
+			for(i = 0; i < N; i++) {
+				h = 0;
+				p = 0;
+				first = i;
+				a1[first] = 0;
+				l = 0;
+				k = 1;
+				t2[l] = 0;
+				for(j = 0; j < N; j++) {
+					t1[j] = t[j];
+					if(j != first) {
+						second = j;
+						d = distance(x[second] - x[first], y[second] - y[first]);
+						if(d <= C) {
+							t1[second] = t1[second] - m[second];
+							t2[l] += t1[second];
+							a1[j] = k;
+							h++;
+						}
+						if(d > C) {
+							a1[j] = -1;
+							p++;
+						}
+					}
+				}
+				
+				if(p == 0)
+					a[first] = 0;
+				
+				if(h == (N - 1))
+					a[first] = 1;
+				
+				if(h != (N - 1)) {
+					for(c = 0; c < N; c++) {
+						z = k;
+						f = l;
+						w = 0;
+						p = 0;
+						fail = 0;
+						pass = 0;
+						for(i = 0; i < N; i++) {
+							if(a1[i] == -1) {
+								second = i;
+								q = 0;
+								while(q < N) {
+									if(a1[q] == z) {
+										third = q;
+										u = 0;
+										d = distance(x[third] - x[second], y[third] - y[second]);
+										if(d <= C) {
+											for( j = f; j >= 0; j--) {
+												if(t2[j] >= m[second]) {
+													u++;
+												}
+											}
+										}
+										
+										if(u !=0 && w==0) {
+											k++;
+											l++;
+											w++;
+										}
+										
+										if(u == ( f + 1)) {
+											h++;
+											p++;
+											pass++;
+											for(j = f; j >= 0; j--) {
+												t2[j] = t2[j] - m[second];
+											}
+											t1[second] = t1[second] - m[second];
+											t2[l] += t1[second];
+											a1[second] = k;
+											q = N;
+										}
+									}
+									q++;
+								}
+							}
+						}
+					}
+				}
+				
+				if(h == N - 1)
+					a[first] = 1;
+				
+				if(h != N - 1)
+					a[first] = 0;
+				
+				i = first;
+			}
+		}
+		
+		k = 0;
+		for(i = 0; i < N; i++) {
+			
+			if(a[i] != 0) {
+				System.out.print(i + " ");
+			k++;
+			}
+		}
+		
+		if(k == 0)
+			System.out.print(-1);
+		sc.close();
+	}
+}
